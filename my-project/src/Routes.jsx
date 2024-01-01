@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { UserContext } from './UserContext'
 import RegisterAndLogin from './RegisterAndLogin'
-import Chat from './chat'
+import Chat from './Chat'
 
 export default function Routes() {
 
