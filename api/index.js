@@ -29,9 +29,7 @@ app.use(
   })
 );
 app.use('/uploads', express.static(__dirname + '/uploads'));
-app.get("/", (req, res) => {
-  res.json("alexa");
-});
+
 
 async function getUserDataFromRequest(req) {
   return new Promise((resolve, reject) => {
