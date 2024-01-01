@@ -25,7 +25,13 @@ const app = express();
 app.use(express.static(path.join(_dirname,'/my-project/dist')));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(cors());
+const corsOptions = {
+  origin: ['https://chatapp-aaww.onrender.com', 'http://localhost:5173'],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
 
