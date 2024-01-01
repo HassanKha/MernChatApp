@@ -25,13 +25,13 @@ const app = express();
 app.use(express.static(path.join(_dirname,'/my-project/dist')));
 app.use(bodyParser.json());
 app.use(cookieParser());
-const corsOptions = {
-  origin: ['https://chatapp-aaww.onrender.com', 'http://localhost:5173'],
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  optionsSuccessStatus: 204,
-};
-
-app.use(cors(corsOptions));
+app.use(
+    cors({
+        origin: ['https://chatapp-aaww.onrender.com', 'http://localhost:5173'],
+      credentials: true, //access-control-allow-credentials:true
+      optionSuccessStatus: 200,
+    })
+  );
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
 
@@ -54,7 +54,7 @@ async function getUserDataFromRequest(req) {
   });
 }
 
-app.get("/messages/:userId",cors(), async (req, res) => {
+app.get("/messages/:userId", async (req, res) => {
   const { userId } = req.params;
   const user = await getUserDataFromRequest(req);
   const ourUserId = user.userId;
@@ -68,12 +68,12 @@ app.get("/messages/:userId",cors(), async (req, res) => {
   res.json(messages);
 });
 
-app.get("/people",cors(), async (req, res) => {
+app.get("/people", async (req, res) => {
   const users = await UserModel.find({}, { _id: 1, username: 1 });
   res.json(users);
 });
 
-app.get("/profile",cors(), (req, res) => {
+app.get("/profile", (req, res) => {
   const token = req.cookies.token;
 
   if (token) {
@@ -95,7 +95,7 @@ app.get("/profile",cors(), (req, res) => {
   }
 });
 
-app.post("/login",cors(), async (req, res) => {
+app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   const foundUser = await UserModel.findOne({ username });
@@ -119,11 +119,11 @@ app.post("/login",cors(), async (req, res) => {
   }
 });
 
-app.post("/logout",cors(), async (req, res) => {
+app.post("/logout", async (req, res) => {
   res.cookie("token", "", { sameSite: "none", secure: true }).json("ok");
 });
 
-app.post("/register",cors(), async (req, res) => {
+app.post("/register", async (req, res) => {
   const { username, password } = req.body;
   const hashpass = bcrypt.hashSync(password, bcryptSalt);
   try {
